@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE DISPATCH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,300;1,8..60,400;1,8..60,500;1,8..60,600;1,8..60,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --cream: #f5f0e8;
+    --cream-dark: #ebe5d9;
+    --ink: #1a1a1a;
+    --ink-light: #3a3a3a;
+    --ink-faint: #6a6a6a;
+    --red: #c41e1e;
+    --red-dark: #9a1515;
+    --rule: #1a1a1a;
+    --rule-light: #c4bfb4;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Source Serif 4', 'Georgia', serif;
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Newsprint grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  /* Secondary texture layer */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 9998;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.06) 100%);
+  }
+
+  a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--red);
+  }
+
+  /* ========== BREAKING TICKER ========== */
+  .ticker-wrap {
+    background: var(--ink);
+    color: var(--cream);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 6px 0;
+    border-bottom: 2px solid var(--red);
+    position: relative;
+  }
+
+  .ticker-label {
+    display: inline-block;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 2px 12px;
+    margin-right: 20px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ticker-content {
+    display: inline-block;
+    animation: ticker 45s linear infinite;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+  }
+
+  .ticker-content span {
+    margin-right: 60px;
+  }
+
+  .ticker-content span::after {
+    content: '\2022';
+    margin-left: 60px;
+    color: var(--red);
+  }
+
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ========== CONTAINER ========== */
+  .page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ========== BACK LINK ========== */
+  .back-link {
+    display: inline-block;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--ink-faint);
+    padding: 12px 0 0;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover {
+    color: var(--red);
+  }
+
+  /* ========== MASTHEAD ========== */
+  .masthead {
+    text-align: center;
+    padding: 20px 0 0;
+    border-bottom: 4px double var(--rule);
+    position: relative;
+  }
+
+  .masthead-rule-top {
+    width: 100%;
+    height: 1px;
+    background: var(--rule);
+    margin-bottom: 8px;
+  }
+
+  .masthead-dateline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 0 8px;
+  }
+
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(3rem, 8vw, 6rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin: 8px 0 4px;
+    text-transform: uppercase;
+  }
+
+  .masthead-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    color: var(--ink-light);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .masthead-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 8px 0;
+    border-top: 1px solid var(--rule-light);
+  }
+
+  .masthead-ornament {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--red);
+  }
+
+  /* ========== SECTION HEADERS ========== */
+  .section-header {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-top: 3px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 0;
+    margin: 24px 0 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-header .section-icon {
+    color: var(--red);
+    font-style: normal;
+  }
+
+  /* ========== ABOVE THE FOLD — FEATURED ========== */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule-light);
+  }
+
+  .featured-divider {
+    background: var(--rule-light);
+    width: 1px;
+  }
+
+  .featured-card {
+    padding: 16px 20px;
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .featured-card:nth-child(1) { animation-delay: 0.1s; }
+  .featured-card:nth-child(3) { animation-delay: 0.25s; }
+  .featured-card:nth-child(5) { animation-delay: 0.4s; }
+
+  .featured-card .card-tag {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .featured-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    transition: color 0.2s;
+  }
+
+  .featured-card:hover h2 {
+    color: var(--red);
+  }
+
+  .featured-card .card-desc {
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+
+  .featured-card .card-desc::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2em;
+    float: left;
+    line-height: 0.85;
+    margin-right: 4px;
+    margin-top: 4px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .featured-card .card-url {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .read-more {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--ink-faint);
+    position: relative;
+    display: inline-block;
+    transition: color 0.2s;
+  }
+
+  .read-more::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--red);
+    transition: width 0.3s ease;
+  }
+
+  .featured-card:hover .read-more,
+  .article-card:hover .read-more {
+    color: var(--red);
+  }
+
+  .featured-card:hover .read-more::after,
+  .article-card:hover .read-more::after {
+    width: 100%;
+  }
+
+  /* ========== PULL QUOTE ========== */
+  .pull-quote {
+    border-top: 3px solid var(--ink);
+    border-bottom: 3px solid var(--ink);
+    padding: 20px 0;
+    margin: 24px 0;
+    text-align: center;
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.5;
+    color: var(--ink-light);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .pull-quote .attribution {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.75rem;
+    font-style: normal;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 10px;
+    display: block;
+  }
+
+  /* ========== BELOW THE FOLD — MAIN GRID ========== */
+  .below-fold {
+    display: grid;
+    grid-template-columns: 2fr 1px 1fr 1px 1fr;
+    gap: 0;
+  }
+
+  .col-divider {
+    background: var(--rule-light);
+  }
+
+  .column {
+    padding: 0 16px;
+  }
+
+  .article-card {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule-light);
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .article-card:last-child {
+    border-bottom: none;
+  }
+
+  .article-card .card-tag {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .article-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+
+  .article-card:hover h3 {
+    color: var(--red);
+  }
+
+  .article-card .card-desc {
+    font-style: italic;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .article-card .card-url {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* Large lead article in first column */
+  .lead-article h3 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .lead-article .card-desc {
+    font-size: 0.95rem;
+  }
+
+  .lead-article .card-desc::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4em;
+    float: left;
+    line-height: 0.8;
+    margin-right: 4px;
+    margin-top: 5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ========== SIDEBAR — QUICK REFERENCE ========== */
+  .sidebar-box {
+    border: 1px solid var(--rule);
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-list {
+    list-style: none;
+  }
+
+  .sidebar-list li {
+    font-size: 0.8rem;
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--rule-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .sidebar-list li:last-child {
+    border-bottom: none;
+  }
+
+  .sidebar-list li a {
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .sidebar-list li a:hover {
+    color: var(--red);
+  }
+
+  .sidebar-list li span {
+    font-size: 0.65rem;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* ========== WEATHER BOX ========== */
+  .weather-box {
+    border: 2px solid var(--ink);
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .weather-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .weather-temp {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .weather-desc {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    margin-bottom: 6px;
+  }
+
+  .weather-detail {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  .weather-icon {
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  /* ========== CLASSIFIED SECTION ========== */
+  .classified-section {
+    border-top: 3px solid var(--ink);
+    margin-top: 28px;
+    padding-top: 4px;
+  }
+
+  .classified-section .section-header {
+    margin-top: 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .classified-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule-light);
+    border: 1px solid var(--rule-light);
+    margin-bottom: 24px;
+  }
+
+  .classified-item {
+    background: var(--cream);
+    padding: 12px 14px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .classified-item:hover {
+    background: var(--cream-dark);
+  }
+
+  .classified-item .cl-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 2px;
+    transition: color 0.2s;
+  }
+
+  .classified-item:hover .cl-name {
+    color: var(--red);
+  }
+
+  .classified-item .cl-desc {
+    font-size: 0.7rem;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
+  /* ========== FOOTER ========== */
+  .page-footer {
+    text-align: center;
+    padding: 20px 0 32px;
+    border-top: 4px double var(--rule);
+    margin-top: 8px;
+  }
+
+  .footer-ornament {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--red);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .page-footer p {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  /* ========== ANIMATIONS ========== */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .fade-in-d1 { animation-delay: 0.1s; }
+  .fade-in-d2 { animation-delay: 0.2s; }
+  .fade-in-d3 { animation-delay: 0.3s; }
+  .fade-in-d4 { animation-delay: 0.4s; }
+  .fade-in-d5 { animation-delay: 0.5s; }
+  .fade-in-d6 { animation-delay: 0.6s; }
+  .fade-in-d7 { animation-delay: 0.7s; }
+  .fade-in-d8 { animation-delay: 0.8s; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 900px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .featured-divider {
+      width: 100%;
+      height: 1px;
+    }
+    .below-fold {
+      grid-template-columns: 1fr;
+    }
+    .col-divider {
+      height: 1px;
+      width: 100%;
+    }
+    .column {
+      padding: 0;
+      border-bottom: 1px solid var(--rule-light);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .classified-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .masthead-dateline {
+      flex-direction: column;
+      gap: 2px;
+    }
+    .masthead-meta {
+      flex-direction: column;
+      gap: 2px;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .classified-grid {
+      grid-template-columns: 1fr;
+    }
+    .page-container {
+      padding: 0 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- BREAKING NEWS TICKER -->
+<div class="ticker-wrap">
+  <span class="ticker-label">BREAKING</span>
+  <div class="ticker-content" id="ticker">
+    <span>All systems reporting nominal uptime across the network</span>
+    <span>Portfolio site updated with latest project entries</span>
+    <span>Cloudflare edge cache hit ratio exceeds 97% this quarter</span>
+    <span>New deployment pushed to Vercel &mdash; build successful in 14s</span>
+    <span>GitHub contribution streak reaches an impressive milestone</span>
+    <span>Streaming infrastructure upgraded to low-latency configuration</span>
+    <span>All systems reporting nominal uptime across the network</span>
+    <span>Portfolio site updated with latest project entries</span>
+    <span>Cloudflare edge cache hit ratio exceeds 97% this quarter</span>
+    <span>New deployment pushed to Vercel &mdash; build successful in 14s</span>
+    <span>GitHub contribution streak reaches an impressive milestone</span>
+    <span>Streaming infrastructure upgraded to low-latency configuration</span>
+  </div>
+</div>
+
+<div class="page-container">
+
+  <!-- BACK LINK -->
+  <a href="/" class="back-link">&larr; Return to Front Page</a>
+
+  <!-- MASTHEAD -->
+  <header class="masthead fade-in">
+    <div class="masthead-rule-top"></div>
+    <div class="masthead-dateline">
+      <span>Est. 2024</span>
+      <span>Personal Dashboard &mdash; All the Links Fit to Click</span>
+      <span>Vol. III, No. 1</span>
+    </div>
+    <h1 class="masthead-title">The Dispatch</h1>
+    <p class="masthead-subtitle">Chase Frazier&rsquo;s Personal Hub &mdash; All Services &amp; Links</p>
+    <div class="masthead-meta">
+      <span id="current-date"></span>
+      <span class="masthead-ornament">&diams;</span>
+      <span>Edition III &bull; Digital Broadsheet</span>
+    </div>
+  </header>
+
+  <!-- ABOVE THE FOLD -->
+  <div class="section-header fade-in fade-in-d1">
+    <span>Above the Fold</span>
+    <em class="section-icon">&sect;</em>
+  </div>
+
+  <div class="featured-grid">
+
+    <!-- GITHUB -->
+    <a href="https://github.com" target="_blank" rel="noopener" class="featured-card">
+      <span class="card-tag">Development</span>
+      <h2>The Complete Source Control Archive</h2>
+      <span class="card-url">github.com</span>
+      <p class="card-desc">Every line of code, every commit message, every branch and merge request &mdash; the authoritative record of all development work, maintained with diligence and version-controlled precision.</p>
+      <span class="read-more">Continue reading &rarr;</span>
+    </a>
+
+    <div class="featured-divider"></div>
+
+    <!-- PORTFOLIO -->
+    <a href="https://chasefrazier.dev" target="_blank" rel="noopener" class="featured-card">
+      <span class="card-tag">Personal</span>
+      <h2>The Official Portfolio &amp; Works Exhibition</h2>
+      <span class="card-url">chasefrazier.dev</span>
+      <p class="card-desc">An extensively curated collection of professional works, creative endeavors, and technical accomplishments &mdash; presented for public viewing and professional inquiry.</p>
+      <span class="read-more">Continue reading &rarr;</span>
+    </a>
+
+    <div class="featured-divider"></div>
+
+    <!-- CLOUDFLARE -->
+    <a href="https://dash.cloudflare.com" target="_blank" rel="noopener" class="featured-card">
+      <span class="card-tag">Infrastructure</span>
+      <h2>Edge Network &amp; Domain Security Bureau</h2>
+      <span class="card-url">dash.cloudflare.com</span>
+      <p class="card-desc">Standing sentinel at the network&rsquo;s perimeter, this bureau oversees DNS routing, SSL certificates, DDoS mitigation, and content delivery across all managed domains.</p>
+      <span class="read-more">Continue reading &rarr;</span>
+    </a>
+
+  </div>
+
+  <!-- PULL QUOTE -->
+  <div class="pull-quote fade-in fade-in-d3">
+    <p>&ldquo;Move fast, ship often, and keep your dashboards organized.&rdquo;</p>
+    <span class="attribution">&mdash; The Editor</span>
+  </div>
+
+  <!-- BELOW THE FOLD -->
+  <div class="section-header fade-in fade-in-d3">
+    <span>Below the Fold</span>
+    <em class="section-icon">&para;</em>
+  </div>
+
+  <div class="below-fold">
+
+    <!-- COLUMN 1 — Lead stories -->
+    <div class="column">
+
+      <a href="https://hpanel.hostinger.com" target="_blank" rel="noopener" class="article-card lead-article fade-in fade-in-d3">
+        <span class="card-tag">Infrastructure</span>
+        <h3>Virtual Private Server Administration</h3>
+        <span class="card-url">hpanel.hostinger.com</span>
+        <p class="card-desc">Housing the critical machinery of web operations, the Hostinger bureau provides direct access to virtual private server management, resource monitoring, and system-level administration of hosted services.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+      <a href="https://vercel.com/dashboard" target="_blank" rel="noopener" class="article-card fade-in fade-in-d4">
+        <span class="card-tag">Deployment</span>
+        <h3>Serverless Deployment Command Center</h3>
+        <span class="card-url">vercel.com/dashboard</span>
+        <p class="card-desc">The nerve center for all serverless operations, managing builds, previews, and production deployments with automated precision.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+      <a href="https://solace.chasefrazier.dev" target="_blank" rel="noopener" class="article-card fade-in fade-in-d5">
+        <span class="card-tag">Media</span>
+        <h3>Live Broadcasting &amp; Streaming Bureau</h3>
+        <span class="card-url">solace.chasefrazier.dev</span>
+        <p class="card-desc">Live transmissions and on-demand programming delivered direct from the studio to audiences everywhere.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+    </div>
+
+    <div class="col-divider"></div>
+
+    <!-- COLUMN 2 — Secondary stories -->
+    <div class="column">
+
+      <a href="https://discord.com/app" target="_blank" rel="noopener" class="article-card fade-in fade-in-d4">
+        <span class="card-tag">Communications</span>
+        <h3>Community Wire &amp; Dispatch</h3>
+        <span class="card-url">discord.com/app</span>
+        <p class="card-desc">The communications switchboard connecting colleagues, communities, and collaborators in real time.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+      <a href="https://notion.so" target="_blank" rel="noopener" class="article-card fade-in fade-in-d5">
+        <span class="card-tag">Documentation</span>
+        <h3>Knowledge Repository &amp; Archives</h3>
+        <span class="card-url">notion.so</span>
+        <p class="card-desc">A comprehensive documentation headquarters housing notes, wikis, project boards, and institutional memory.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+      <a href="https://analytics.google.com" target="_blank" rel="noopener" class="article-card fade-in fade-in-d6">
+        <span class="card-tag">Intelligence</span>
+        <h3>Traffic Intelligence &amp; Data Bureau</h3>
+        <span class="card-url">analytics.google.com</span>
+        <p class="card-desc">Tabulating visitor counts, mapping user journeys, and measuring engagement across all digital properties.</p>
+        <span class="read-more">Continue reading &rarr;</span>
+      </a>
+
+    </div>
+
+    <div class="col-divider"></div>
+
+    <!-- COLUMN 3 — Sidebar -->
+    <div class="column">
+
+      <!-- Weather Box -->
+      <div class="weather-box fade-in fade-in-d4">
+        <h4>Today&rsquo;s Weather</h4>
+        <span class="weather-icon" id="weather-icon">&#9729;</span>
+        <div class="weather-temp" id="weather-temp">&mdash;&deg;</div>
+        <div class="weather-desc" id="weather-desc">Checking conditions&hellip;</div>
+        <div class="weather-detail" id="weather-detail">Stand by for report</div>
+      </div>
+
+      <!-- Quick Reference -->
+      <div class="sidebar-box fade-in fade-in-d5">
+        <h4>Quick Reference</h4>
+        <ul class="sidebar-list">
+          <li>
+            <a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT</a>
+            <span>AI Bureau</span>
+          </li>
+          <li>
+            <a href="https://open.spotify.com" target="_blank" rel="noopener">Spotify</a>
+            <span>Music Desk</span>
+          </li>
+          <li>
+            <a href="https://shower.chasefrazier.dev" target="_blank" rel="noopener">Shower Tracker</a>
+            <span>Metrics Div.</span>
+          </li>
+          <li>
+            <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+            <span>Source Ctrl.</span>
+          </li>
+          <li>
+            <a href="https://vercel.com/dashboard" target="_blank" rel="noopener">Vercel</a>
+            <span>Deploys</span>
+          </li>
+          <li>
+            <a href="https://notion.so" target="_blank" rel="noopener">Notion</a>
+            <span>Knowledge</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Index Box -->
+      <div class="sidebar-box fade-in fade-in-d6">
+        <h4>Service Index</h4>
+        <ul class="sidebar-list">
+          <li><a href="#classified">Development</a> <span>3 links</span></li>
+          <li><a href="#classified">Infrastructure</a> <span>2 links</span></li>
+          <li><a href="#classified">Personal</a> <span>3 links</span></li>
+          <li><a href="#classified">Media</a> <span>2 links</span></li>
+          <li><a href="#classified">Intelligence</a> <span>2 links</span></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CLASSIFIED SECTION -->
+  <div class="classified-section" id="classified">
+    <div class="section-header fade-in fade-in-d6">
+      <span>Classified &amp; Directory</span>
+      <em class="section-icon">&dagger;</em>
+    </div>
+
+    <div class="classified-grid fade-in fade-in-d7">
+
+      <a href="https://chat.openai.com" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">ChatGPT</span>
+        <span class="cl-desc">Artificial Intelligence Correspondence</span>
+      </a>
+
+      <a href="https://open.spotify.com" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Spotify</span>
+        <span class="cl-desc">Audio Entertainment &amp; Music Library</span>
+      </a>
+
+      <a href="https://shower.chasefrazier.dev" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Shower Tracker</span>
+        <span class="cl-desc">Personal Hygiene Metrics Division</span>
+      </a>
+
+      <a href="https://discord.com/app" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Discord</span>
+        <span class="cl-desc">Communications &amp; Community Wire</span>
+      </a>
+
+      <a href="https://analytics.google.com" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Analytics</span>
+        <span class="cl-desc">Traffic Intelligence &amp; Data Bureau</span>
+      </a>
+
+      <a href="https://notion.so" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Notion</span>
+        <span class="cl-desc">Documentation &amp; Knowledge Repository</span>
+      </a>
+
+      <a href="https://solace.chasefrazier.dev" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Solace</span>
+        <span class="cl-desc">Live Broadcasting &amp; Streaming Bureau</span>
+      </a>
+
+      <a href="https://hpanel.hostinger.com" target="_blank" rel="noopener" class="classified-item">
+        <span class="cl-name">Hostinger</span>
+        <span class="cl-desc">Virtual Private Server Administration</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="page-footer fade-in fade-in-d8">
+    <span class="footer-ornament">&diams; &diams; &diams;</span>
+    <p>The Dispatch &bull; A Chase Frazier Production</p>
+    <p>All services and links are property of their respective operators</p>
+    <p style="margin-top: 8px;">
+      <a href="/" style="color: var(--red); font-style: italic;">&larr; Return to Front Page</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  // Set current date in masthead
+  (function() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('en-US', options);
+    document.getElementById('current-date').textContent = dateStr;
+  })();
+
+  // Weather widget (uses wttr.in for a simple no-key forecast)
+  (function() {
+    const iconEl = document.getElementById('weather-icon');
+    const tempEl = document.getElementById('weather-temp');
+    const descEl = document.getElementById('weather-desc');
+    const detailEl = document.getElementById('weather-detail');
+
+    fetch('https://wttr.in/?format=j1')
+      .then(r => r.json())
+      .then(data => {
+        const current = data.current_condition[0];
+        const tempF = current.temp_F;
+        const desc = current.weatherDesc[0].value;
+        const humidity = current.humidity;
+        const windMph = current.windspeedMiles;
+        const feelsLike = current.FeelsLikeF;
+
+        // Map weather codes to simple icons
+        const code = parseInt(current.weatherCode);
+        let icon = '\u2600'; // sun
+        if (code >= 176 && code < 300) icon = '\u26C8'; // rain/thunder
+        else if (code >= 300 && code < 400) icon = '\u2602'; // drizzle
+        else if (code >= 400 && code < 600) icon = '\u26C6'; // snow-ish
+        else if (code >= 600 && code < 700) icon = '\u2744'; // snow
+        else if (code === 116) icon = '\u26C5'; // partly cloudy
+        else if (code === 119 || code === 122) icon = '\u2601'; // cloudy
+        else if (code === 113) icon = '\u2600'; // sunny
+
+        iconEl.textContent = icon;
+        tempEl.innerHTML = tempF + '&deg;F';
+        descEl.textContent = desc;
+        detailEl.innerHTML = 'Feels like ' + feelsLike + '&deg;F &bull; Humidity ' + humidity + '% &bull; Wind ' + windMph + ' mph';
+      })
+      .catch(() => {
+        iconEl.textContent = '\u2601';
+        tempEl.innerHTML = '&mdash;';
+        descEl.textContent = 'Forecast unavailable';
+        detailEl.textContent = 'Unable to reach the weather bureau';
+      });
+  })();
+</script>
+
+</body>
+</html>

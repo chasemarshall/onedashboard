@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOID</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  :root{
+    --bg:#08080a;
+    --card:#111113;
+    --border:#1a1a1e;
+    --gold:#c8a44e;
+    --gold-dim:rgba(200,164,78,.15);
+    --gold-glow:rgba(200,164,78,.08);
+    --text:#d4d0c8;
+    --text-muted:rgba(212,208,200,.4);
+    --text-faint:rgba(212,208,200,.22);
+    --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --sans:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+
+  html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* Noise grain overlay */
+  body::after{
+    content:'';
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    pointer-events:none;
+    opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat:repeat;
+    background-size:180px 180px;
+  }
+
+  .container{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ── HEADER ── */
+  header{
+    padding:72px 0 0;
+    opacity:0;
+    animation:fadeIn 1s ease-out .2s forwards;
+  }
+
+  .header-inner{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .logo{
+    font-family:var(--serif);
+    font-size:11px;
+    font-weight:400;
+    letter-spacing:.45em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+  }
+
+  .header-name{
+    font-family:var(--serif);
+    font-size:28px;
+    font-weight:300;
+    letter-spacing:.02em;
+    line-height:1.2;
+    color:var(--text);
+    margin-top:2px;
+  }
+
+  .gold-rule{
+    width:0;
+    height:1px;
+    background:var(--gold);
+    margin:20px 0;
+    animation:expandRule 1.2s ease-out .6s forwards;
+  }
+
+  .header-time{
+    font-family:var(--sans);
+    font-size:11px;
+    font-weight:300;
+    letter-spacing:.12em;
+    color:var(--text-faint);
+    text-transform:uppercase;
+  }
+
+  /* ── CURRENT SECTION ── */
+  .current-section{
+    margin-top:48px;
+    opacity:0;
+    animation:fadeIn .8s ease-out .5s forwards;
+  }
+
+  .section-label{
+    font-family:var(--serif);
+    font-size:10px;
+    font-weight:500;
+    letter-spacing:.5em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:14px;
+  }
+
+  .live-time{
+    font-family:var(--serif);
+    font-size:42px;
+    font-weight:300;
+    letter-spacing:.04em;
+    color:var(--text);
+    line-height:1;
+  }
+
+  .live-time .seconds{
+    font-size:18px;
+    color:var(--text-muted);
+    margin-left:4px;
+    font-weight:300;
+  }
+
+  .live-date{
+    font-family:var(--sans);
+    font-size:12px;
+    font-weight:300;
+    letter-spacing:.08em;
+    color:var(--text-faint);
+    margin-top:8px;
+    text-transform:uppercase;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrapper{
+    margin-top:40px;
+    opacity:0;
+    animation:fadeIn .8s ease-out .7s forwards;
+  }
+
+  .search-input{
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--border);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:13px;
+    font-weight:300;
+    letter-spacing:.06em;
+    padding:8px 0;
+    width:280px;
+    max-width:100%;
+    outline:none;
+    transition:border-color .4s ease;
+  }
+
+  .search-input::placeholder{
+    color:var(--text-faint);
+    font-style:italic;
+    font-family:var(--serif);
+    font-weight:300;
+  }
+
+  .search-input:focus{
+    border-bottom-color:var(--gold);
+  }
+
+  .search-hint{
+    font-size:10px;
+    letter-spacing:.1em;
+    color:var(--text-faint);
+    margin-top:10px;
+    font-weight:300;
+  }
+
+  .search-hint kbd{
+    font-family:var(--sans);
+    font-size:9px;
+    letter-spacing:.05em;
+    border:1px solid var(--border);
+    padding:1px 5px;
+    border-radius:2px;
+    margin:0 2px;
+    color:var(--text-muted);
+  }
+
+  /* ── BENTO GRID ── */
+  .bento-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-top:48px;
+    padding-bottom:16px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:4px;
+    padding:28px 26px;
+    text-decoration:none;
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+    transition:transform .4s cubic-bezier(.25,.1,.25,1),
+               border-color .4s ease,
+               box-shadow .4s ease;
+    opacity:0;
+    animation:fadeUp .8s ease-out forwards;
+  }
+
+  .card:hover{
+    transform:translateY(-2px);
+    border-color:rgba(200,164,78,.2);
+    box-shadow:0 4px 24px rgba(200,164,78,.04);
+  }
+
+  .card.large{grid-column:span 2}
+  .card.tall{grid-row:span 2}
+
+  /* Staggered fade-in */
+  .card:nth-child(1){animation-delay:.4s}
+  .card:nth-child(2){animation-delay:.48s}
+  .card:nth-child(3){animation-delay:.56s}
+  .card:nth-child(4){animation-delay:.64s}
+  .card:nth-child(5){animation-delay:.72s}
+  .card:nth-child(6){animation-delay:.8s}
+  .card:nth-child(7){animation-delay:.88s}
+  .card:nth-child(8){animation-delay:.96s}
+  .card:nth-child(9){animation-delay:1.04s}
+  .card:nth-child(10){animation-delay:1.12s}
+  .card:nth-child(11){animation-delay:1.2s}
+  .card:nth-child(12){animation-delay:1.28s}
+
+  /* Gold corner brackets for featured cards */
+  .card.featured::before,
+  .card.featured::after{
+    content:'';
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-color:var(--gold);
+    border-style:solid;
+    opacity:.3;
+    transition:opacity .4s ease;
+  }
+
+  .card.featured::before{
+    top:10px;left:10px;
+    border-width:1px 0 0 1px;
+  }
+
+  .card.featured::after{
+    bottom:10px;right:10px;
+    border-width:0 1px 1px 0;
+  }
+
+  .card.featured:hover::before,
+  .card.featured:hover::after{
+    opacity:.6;
+  }
+
+  .card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+  }
+
+  .card-icon{
+    flex-shrink:0;
+    width:28px;
+    height:28px;
+    color:var(--text-muted);
+    opacity:.5;
+    transition:color .4s ease, opacity .4s ease;
+  }
+
+  .card:hover .card-icon{
+    color:var(--gold);
+    opacity:.7;
+  }
+
+  .card-name{
+    font-family:var(--serif);
+    font-size:18px;
+    font-weight:400;
+    letter-spacing:.02em;
+    line-height:1.2;
+  }
+
+  .card-desc{
+    font-family:var(--sans);
+    font-size:11px;
+    font-weight:300;
+    letter-spacing:.04em;
+    color:var(--text-muted);
+    line-height:1.5;
+    margin-top:auto;
+    padding-top:18px;
+  }
+
+  /* Gold accent line at bottom of card */
+  .card-accent{
+    position:absolute;
+    bottom:0;
+    left:26px;
+    right:26px;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    opacity:0;
+    transition:opacity .4s ease;
+  }
+
+  .card:hover .card-accent{
+    opacity:.25;
+  }
+
+  /* Status dot */
+  .status-dot{
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:var(--gold);
+    opacity:.5;
+    flex-shrink:0;
+    margin-top:6px;
+  }
+
+  /* ── FOOTER ── */
+  footer{
+    padding:48px 0 64px;
+    opacity:0;
+    animation:fadeIn .8s ease-out 1.4s forwards;
+  }
+
+  .footer-rule{
+    width:0;
+    height:1px;
+    background:var(--gold);
+    margin-bottom:20px;
+    animation:expandRule 1s ease-out 1.5s forwards;
+  }
+
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .back-link{
+    font-family:var(--serif);
+    font-size:12px;
+    font-weight:300;
+    letter-spacing:.15em;
+    color:var(--text-faint);
+    text-decoration:none;
+    transition:color .3s ease;
+  }
+
+  .back-link:hover{
+    color:var(--gold);
+  }
+
+  .footer-mark{
+    font-family:var(--serif);
+    font-size:10px;
+    letter-spacing:.4em;
+    color:var(--text-faint);
+    text-transform:uppercase;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn{
+    from{opacity:0}
+    to{opacity:1}
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(12px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  @keyframes expandRule{
+    from{width:0}
+    to{width:100%}
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:860px){
+    .bento-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .card.large{grid-column:span 2}
+    .header-name{font-size:24px}
+    .live-time{font-size:34px}
+    .container{padding:0 24px}
+    header{padding-top:48px}
+  }
+
+  @media(max-width:520px){
+    .bento-grid{grid-template-columns:1fr;gap:10px}
+    .card.large{grid-column:span 1}
+    .header-name{font-size:20px}
+    .live-time{font-size:28px}
+    .search-input{width:100%}
+    .container{padding:0 20px}
+    header{padding-top:40px}
+  }
+
+  /* ── HIDDEN CARDS (search filter) ── */
+  .card.hidden{
+    display:none;
+  }
+
+  /* No results */
+  .no-results{
+    grid-column:1/-1;
+    text-align:center;
+    padding:48px 0;
+    font-family:var(--serif);
+    font-size:14px;
+    font-weight:300;
+    letter-spacing:.08em;
+    color:var(--text-faint);
+    display:none;
+  }
+
+  .no-results.visible{
+    display:block;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <span class="logo">Void</span>
+      <h1 class="header-name">Chase Frazier</h1>
+    </div>
+    <div class="gold-rule"></div>
+    <div class="header-time" id="headerTime"></div>
+  </header>
+
+  <!-- CURRENT -->
+  <section class="current-section">
+    <div class="section-label">Current</div>
+    <div class="live-time" id="liveTime"></div>
+    <div class="live-date" id="liveDate"></div>
+  </section>
+
+  <!-- SEARCH -->
+  <div class="search-wrapper">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search..." autocomplete="off" spellcheck="false">
+    <div class="search-hint">Press <kbd>1</kbd>&ndash;<kbd>9</kbd> to quick-launch &middot; <kbd>/</kbd> to search</div>
+  </div>
+
+  <!-- BENTO GRID -->
+  <div class="bento-grid" id="bentoGrid">
+
+    <!-- 1 GitHub — LARGE, featured -->
+    <a href="https://github.com" class="card large featured" data-key="1" data-name="GitHub">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">GitHub</div>
+        <div class="card-desc">Source code, repositories & version control</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 2 Portfolio — LARGE, featured -->
+    <a href="https://chasefrazier.dev" class="card large featured" data-key="2" data-name="Portfolio">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">Portfolio</div>
+        <div class="card-desc">Personal brand, projects & presence</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 3 Cloudflare — MEDIUM -->
+    <a href="https://dash.cloudflare.com" class="card" data-key="3" data-name="Cloudflare">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">Cloudflare</div>
+        <div class="card-desc">DNS, security & edge network</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 4 Hostinger — MEDIUM -->
+    <a href="https://hpanel.hostinger.com" class="card" data-key="4" data-name="Hostinger">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">Hostinger</div>
+        <div class="card-desc">Web hosting & domain management</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 5 Solace — MEDIUM -->
+    <a href="https://solace.chasefrazier.dev" class="card" data-key="5" data-name="Solace">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">Solace</div>
+        <div class="card-desc">Streaming & live broadcasts</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 6 Vercel — MEDIUM -->
+    <a href="https://vercel.com/dashboard" class="card" data-key="6" data-name="Vercel">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">Vercel</div>
+        <div class="card-desc">Deployments & serverless infrastructure</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 7 Shower Tracker — SMALL -->
+    <a href="https://shower.chasefrazier.dev" class="card" data-key="7" data-name="Shower Tracker">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+      </div>
+      <div>
+        <div class="card-name">Shower Tracker</div>
+        <div class="card-desc">Personal wellness logging</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 8 Discord — SMALL -->
+    <a href="https://discord.com/app" class="card" data-key="8" data-name="Discord">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/><path d="M8.5 17c1 1 3 2 3.5 2s2.5-1 3.5-2"/><path d="M20.2 17.2c.5-1 .8-3.2.8-5.2 0-4-2.5-7-5-8l-1 2s-1.5-.5-3-.5-3 .5-3 .5l-1-2c-2.5 1-5 4-5 8 0 2 .3 4.2.8 5.2 1.5 2.8 5.5 3.5 7.2 3.5h2c1.7 0 5.7-.7 7.2-3.5z"/></svg>
+      </div>
+      <div>
+        <div class="card-name">Discord</div>
+        <div class="card-desc">Communities & voice</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 9 Notion — SMALL -->
+    <a href="https://notion.so" class="card" data-key="9" data-name="Notion">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M9 4v16"/><path d="M14 8h4"/><path d="M14 12h4"/><path d="M14 16h4"/></svg>
+      </div>
+      <div>
+        <div class="card-name">Notion</div>
+        <div class="card-desc">Notes, docs & knowledge base</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 10 Analytics — SMALL -->
+    <a href="https://analytics.google.com" class="card" data-key="0" data-name="Analytics">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div>
+        <div class="card-name">Analytics</div>
+        <div class="card-desc">Traffic & engagement data</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 11 ChatGPT — MEDIUM -->
+    <a href="https://chat.openai.com" class="card" data-name="ChatGPT">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        <span class="status-dot"></span>
+      </div>
+      <div>
+        <div class="card-name">ChatGPT</div>
+        <div class="card-desc">AI-assisted thinking & generation</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <!-- 12 Spotify — MEDIUM -->
+    <a href="https://open.spotify.com" class="card" data-name="Spotify">
+      <div class="card-top">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15c2-1 4.5-1.2 7-.5"/><path d="M7 12c2.5-1.2 6-1.5 9-.5"/><path d="M6.5 9C9.5 7.5 14 7.2 17.5 8.5"/></svg>
+      </div>
+      <div>
+        <div class="card-name">Spotify</div>
+        <div class="card-desc">Music, playlists & audio</div>
+      </div>
+      <div class="card-accent"></div>
+    </a>
+
+    <div class="no-results" id="noResults">Nothing found</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-rule"></div>
+    <div class="footer-inner">
+      <a href="/" class="back-link">&larr; hub</a>
+      <span class="footer-mark">Void</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── Live Clock ──
+  const liveTimeEl = document.getElementById('liveTime');
+  const liveDateEl = document.getElementById('liveDate');
+  const headerTimeEl = document.getElementById('headerTime');
+
+  function updateClock(){
+    const now = new Date();
+    const h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    const h12 = h % 12 || 12;
+    const ampm = h >= 12 ? 'PM' : 'AM';
+
+    liveTimeEl.innerHTML = h12 + ':' + m + '<span class="seconds">:' + s + ' ' + ampm + '</span>';
+
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    liveDateEl.textContent = days[now.getDay()] + ', ' + months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+
+    headerTimeEl.textContent = days[now.getDay()] + ' ' + h12 + ':' + m + ' ' + ampm;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── Search ──
+  const searchInput = document.getElementById('searchInput');
+  const cards = document.querySelectorAll('.card');
+  const noResults = document.getElementById('noResults');
+
+  searchInput.addEventListener('input', function(){
+    const q = this.value.toLowerCase().trim();
+    let visible = 0;
+
+    cards.forEach(function(card){
+      const name = (card.getAttribute('data-name') || '').toLowerCase();
+      const desc = (card.querySelector('.card-desc') || {}).textContent || '';
+      const match = !q || name.includes(q) || desc.toLowerCase().includes(q);
+      card.classList.toggle('hidden', !match);
+      if(match) visible++;
+    });
+
+    noResults.classList.toggle('visible', visible === 0);
+  });
+
+  // ── Keyboard Shortcuts ──
+  document.addEventListener('keydown', function(e){
+    // Focus search on "/"
+    if(e.key === '/' && document.activeElement !== searchInput){
+      e.preventDefault();
+      searchInput.focus();
+      return;
+    }
+
+    // Escape blurs search
+    if(e.key === 'Escape'){
+      searchInput.blur();
+      searchInput.value = '';
+      searchInput.dispatchEvent(new Event('input'));
+      return;
+    }
+
+    // Number keys for quick-launch (only when not typing in search)
+    if(document.activeElement === searchInput) return;
+
+    if(e.key >= '0' && e.key <= '9'){
+      const card = document.querySelector('.card[data-key="' + e.key + '"]');
+      if(card){
+        e.preventDefault();
+        card.click();
+        window.open(card.href, '_blank');
+      }
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
