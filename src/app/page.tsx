@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { services } from '@/data/services';
 import { useClock } from '@/hooks/useClock';
+import Nav from '@/components/Nav';
 import styles from './page.module.css';
 
 const ACCENTS = [
@@ -74,6 +75,7 @@ export default function Dashboard() {
         <span className={styles.title}>chase&apos;s dashboard</span>
         <span className={styles.clock}>{clock}</span>
       </header>
+      <Nav />
 
       <div className={styles.searchWrap}>
         <input

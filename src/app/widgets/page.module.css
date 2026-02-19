@@ -1,0 +1,129 @@
+.wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #313244;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.pageName {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a6adc8;
+  white-space: nowrap;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: #313244;
+}
+
+/* ── Widget Grid ── */
+.widgetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.widget {
+  padding: 24px;
+  background: #181825;
+  border: 2px solid #313244;
+}
+
+.widgetLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #585b70;
+  margin-bottom: 16px;
+}
+
+/* ── Clock Widget ── */
+.clockDisplay {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #cdd6f4;
+}
+
+.dateDisplay {
+  font-size: 0.8rem;
+  color: #a6adc8;
+  margin-top: 4px;
+}
+
+/* ── Weather Widget ── */
+.weatherMain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.weatherIcon {
+  font-size: 2rem;
+}
+
+.weatherTemp {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #cdd6f4;
+}
+
+.weatherDesc {
+  font-size: 0.85rem;
+  color: #a6adc8;
+  text-transform: capitalize;
+}
+
+.weatherCity {
+  font-size: 0.75rem;
+  color: #585b70;
+  margin-top: 2px;
+  margin-bottom: 12px;
+}
+
+.weatherDetails {
+  display: flex;
+  gap: 16px;
+  font-size: 0.7rem;
+  color: #585b70;
+}
+
+.weatherError,
+.weatherLoading {
+  font-size: 0.85rem;
+  color: #585b70;
+}
+
+@media (max-width: 520px) {
+  .widgetGrid {
+    grid-template-columns: 1fr;
+  }
+}

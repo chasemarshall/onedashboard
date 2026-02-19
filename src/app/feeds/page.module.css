@@ -1,0 +1,94 @@
+.wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #313244;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.pageTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.pageName {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a6adc8;
+  white-space: nowrap;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: #313244;
+}
+
+.loading {
+  text-align: center;
+  padding: 48px 0;
+  color: #585b70;
+  font-size: 0.9rem;
+}
+
+.feedList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feedItem {
+  display: block;
+  padding: 14px 16px;
+  background: #181825;
+  border: 1px solid transparent;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+
+.feedItem:hover {
+  border-color: #313244;
+}
+
+.feedMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.feedSource {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cba6f7;
+}
+
+.feedTime {
+  font-size: 0.65rem;
+  color: #585b70;
+}
+
+.feedTitle {
+  font-size: 0.85rem;
+  color: #cdd6f4;
+  line-height: 1.4;
+}
