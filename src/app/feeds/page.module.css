@@ -40,6 +40,78 @@
   background: #313244;
 }
 
+/* ── Controls ── */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.sources {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.sourceBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border: 1px solid #313244;
+  background: transparent;
+  color: #585b70;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.sourceBtn:hover {
+  color: #cdd6f4;
+}
+
+.sourceBtnActive {
+  color: #cdd6f4;
+  background: #181825;
+  border-color: #cba6f7;
+}
+
+.sortGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sortLabel {
+  font-size: 0.65rem;
+  color: #585b70;
+  margin-right: 4px;
+}
+
+.sortBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #585b70;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.sortBtn:hover {
+  color: #cdd6f4;
+}
+
+.sortBtnActive {
+  color: #a6adc8;
+  border-color: #313244;
+  background: #181825;
+}
+
+/* ── Feed List ── */
 .loading {
   text-align: center;
   padding: 48px 0;
@@ -55,11 +127,15 @@
 
 .feedItem {
   display: block;
+  width: 100%;
   padding: 14px 16px;
   background: #181825;
   border: 1px solid transparent;
   text-decoration: none;
   color: inherit;
+  text-align: left;
+  font-family: var(--font-mono), monospace;
+  cursor: pointer;
   transition: border-color 0.15s;
 }
 
@@ -91,4 +167,124 @@
   font-size: 0.85rem;
   color: #cdd6f4;
   line-height: 1.4;
+}
+
+/* ── Reader Overlay ── */
+.readerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 17, 27, 0.85);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 40px 24px;
+  overflow-y: auto;
+}
+
+.reader {
+  width: 100%;
+  max-width: 680px;
+  background: #1e1e2e;
+  border: 2px solid #313244;
+  padding: 32px;
+  align-self: flex-start;
+}
+
+.readerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.readerMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.readerSource {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cba6f7;
+}
+
+.readerTime {
+  font-size: 0.7rem;
+  color: #585b70;
+}
+
+.readerClose {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border: 1px solid #313244;
+  background: #181825;
+  color: #a6adc8;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.readerClose:hover {
+  border-color: #cba6f7;
+}
+
+.readerTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #cdd6f4;
+  margin-bottom: 8px;
+}
+
+.readerLink {
+  font-size: 0.7rem;
+  color: #585b70;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.readerLink:hover {
+  color: #cba6f7;
+}
+
+.readerDivider {
+  height: 1px;
+  background: #313244;
+  margin: 20px 0;
+}
+
+.readerLoading {
+  color: #585b70;
+  font-size: 0.85rem;
+  padding: 24px 0;
+  text-align: center;
+}
+
+.readerContent {
+  font-size: 0.85rem;
+  color: #bac2de;
+  line-height: 1.7;
+}
+
+.readerContent p {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 520px) {
+  .controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reader {
+    padding: 20px;
+  }
+
+  .readerOverlay {
+    padding: 20px 12px;
+  }
 }
