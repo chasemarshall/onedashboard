@@ -11,6 +11,11 @@ const ACCENTS = [
   '#f38ba8', '#b4befe', '#f2cdcd', '#89dceb',
 ];
 
+const CATEGORIES = [
+  { key: 'my-projects' as const, label: 'my projects' },
+  { key: 'services' as const, label: 'services & tools' },
+];
+
 export default function Dashboard() {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,6 +66,8 @@ export default function Dashboard() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [filtered]);
 
+  let globalIndex = 0;
+
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
@@ -79,42 +86,59 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className={styles.grid}>
-        {filtered.length === 0 ? (
-          <div className={styles.empty}>no services match &quot;{query}&quot;</div>
-        ) : (
-          filtered.map((s, i) => {
-            const accent = ACCENTS[i % ACCENTS.length];
+      {filtered.length === 0 ? (
+        <div className={styles.empty}>no services match &quot;{query}&quot;</div>
+      ) : (
+        <div className={styles.sections}>
+          {CATEGORIES.map((cat) => {
+            const items = filtered.filter((s) => s.category === cat.key);
+            if (items.length === 0) return null;
+
             return (
-              <a
-                key={s.id}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.card}
-                style={{
-                  '--accent': accent,
-                } as React.CSSProperties}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = accent;
-                  el.style.boxShadow = `4px 4px 0 ${accent}`;
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget;
-                  el.style.borderColor = '#313244';
-                  el.style.boxShadow = 'none';
-                }}
-              >
-                {i < 9 && <span className={styles.badge}>{i + 1}</span>}
-                <div className={styles.cardName}>{s.name}</div>
-                <div className={styles.cardDesc}>{s.desc}</div>
-                <div className={styles.cardUrl}>{s.url.replace(/^https?:\/\//, '')}</div>
-              </a>
+              <section key={cat.key} className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <span className={styles.sectionLabel}>{cat.label}</span>
+                  <span className={styles.sectionCount}>{items.length}</span>
+                  <span className={styles.sectionLine} />
+                </div>
+                <div className={styles.grid}>
+                  {items.map((s) => {
+                    const i = globalIndex++;
+                    const accent = ACCENTS[i % ACCENTS.length];
+                    return (
+                      <a
+                        key={s.id}
+                        href={s.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.card}
+                        style={{
+                          '--accent': accent,
+                        } as React.CSSProperties}
+                        onMouseEnter={(e) => {
+                          const el = e.currentTarget;
+                          el.style.borderColor = accent;
+                          el.style.boxShadow = `4px 4px 0 ${accent}`;
+                        }}
+                        onMouseLeave={(e) => {
+                          const el = e.currentTarget;
+                          el.style.borderColor = '#313244';
+                          el.style.boxShadow = 'none';
+                        }}
+                      >
+                        {i < 9 && <span className={styles.badge}>{i + 1}</span>}
+                        <div className={styles.cardName}>{s.name}</div>
+                        <div className={styles.cardDesc}>{s.desc}</div>
+                        <div className={styles.cardUrl}>{s.url.replace(/^https?:\/\//, '')}</div>
+                      </a>
+                    );
+                  })}
+                </div>
+              </section>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
 
       <footer className={styles.footer}>
         <span>{filtered.length} service{filtered.length !== 1 ? 's' : ''}</span>

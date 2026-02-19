@@ -52,14 +52,57 @@
   border-color: #cba6f7;
 }
 
+/* ── Sections ── */
+.sections {
+  flex: 1;
+  padding-bottom: 24px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sectionLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #a6adc8;
+  white-space: nowrap;
+}
+
+.sectionCount {
+  font-size: 0.65rem;
+  color: #585b70;
+  padding: 1px 6px;
+  border: 1px solid #313244;
+  background: #1e1e2e;
+  white-space: nowrap;
+}
+
+.sectionLine {
+  flex: 1;
+  height: 1px;
+  background: #313244;
+}
+
 /* ── Grid ── */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  flex: 1;
   align-content: start;
-  padding-bottom: 24px;
 }
 
 /* ── Card ── */
