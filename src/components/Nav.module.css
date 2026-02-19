@@ -11,6 +11,9 @@
   text-decoration: none;
   padding: 4px 12px;
   border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   transition: color 0.15s, border-color 0.15s;
 }
 
@@ -22,4 +25,17 @@
   color: #cdd6f4;
   border-color: #313244;
   background: #181825;
+}
+
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  border: 1px solid #313244;
+  color: #6c7086;
+  background: #1e1e2e;
 }

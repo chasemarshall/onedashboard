@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Nav from '@/components/Nav';
 import styles from './page.module.css';
 
@@ -18,9 +19,7 @@ export default function FeedsPage() {
   const [loading, setLoading] = useState(true);
   const [activeSource, setActiveSource] = useState<string>('all');
   const [sort, setSort] = useState<SortMode>('newest');
-  const [selectedItem, setSelectedItem] = useState<FeedItem | null>(null);
-  const [articleContent, setArticleContent] = useState('');
-  const [articleLoading, setArticleLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/feeds')
@@ -29,35 +28,14 @@ export default function FeedsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  const closeReader = useCallback(() => {
-    setSelectedItem(null);
-    setArticleContent('');
-  }, []);
-
-  useEffect(() => {
-    function handleKey(e: KeyboardEvent) {
-      if (e.key === 'Escape' && selectedItem) {
-        closeReader();
-      }
-    }
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [selectedItem, closeReader]);
-
   function openArticle(item: FeedItem) {
-    setSelectedItem(item);
-    setArticleLoading(true);
-    setArticleContent('');
-    fetch(`/api/article?url=${encodeURIComponent(item.link)}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setArticleContent(data.content || 'Could not extract article content.');
-        setArticleLoading(false);
-      })
-      .catch(() => {
-        setArticleContent('Failed to load article.');
-        setArticleLoading(false);
-      });
+    const params = new URLSearchParams({
+      url: item.link,
+      title: item.title,
+      source: item.source,
+      date: item.pubDate,
+    });
+    router.push(`/feeds/read?${params.toString()}`);
   }
 
   function timeAgo(dateStr: string) {
@@ -139,40 +117,6 @@ export default function FeedsPage() {
               <div className={styles.feedTitle}>{item.title}</div>
             </button>
           ))}
-        </div>
-      )}
-
-      {/* Reader Overlay */}
-      {selectedItem && (
-        <div className={styles.readerOverlay} onClick={closeReader}>
-          <div className={styles.reader} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.readerHeader}>
-              <div className={styles.readerMeta}>
-                <span className={styles.readerSource}>{selectedItem.source}</span>
-                <span className={styles.readerTime}>{timeAgo(selectedItem.pubDate)}</span>
-              </div>
-              <button className={styles.readerClose} onClick={closeReader}>esc</button>
-            </div>
-            <h1 className={styles.readerTitle}>{selectedItem.title}</h1>
-            <a
-              href={selectedItem.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.readerLink}
-            >
-              {selectedItem.link.replace(/^https?:\/\//, '')}
-            </a>
-            <div className={styles.readerDivider} />
-            {articleLoading ? (
-              <div className={styles.readerLoading}>extracting article...</div>
-            ) : (
-              <div className={styles.readerContent}>
-                {articleContent.split('\n').map((line, i) => (
-                  <p key={i}>{line || '\u00A0'}</p>
-                ))}
-              </div>
-            )}
-          </div>
         </div>
       )}
     </div>
